@@ -1,10 +1,16 @@
+<!--
+ * @author: jason_zuo
+ * @LastEditors: jason_zuo
+ * @LastEditTime: 2023-03-28 16:43:44
+ * @FilePath: \chatgpt\src\components\TabContent\CatagoryInfo.vue
+-->
 <template>
   <div class="info-container">
     <div class="infoTitle">
       {{ info.title }}
     </div>
     <div class="info-content">
-      <div v-for="item in info.datalist" :key="item.infoName" class="info-detail">
+      <div v-for="item in info.datalist" :key="item.infoName" class="info-detail" @click="showDetailInfo(item)">
         <span v-html="item.iconName" class="info-icon"></span>
         <span>{{ item.infoName}}</span>
     </div>
@@ -16,6 +22,11 @@
 export default {
   name: "CatagoryInfo",
   props: ["info"],
+  methods: {
+    showDetailInfo(item){
+      this.$emit('showDetailInfo',item)
+    }
+  }
 };
 </script>
 
