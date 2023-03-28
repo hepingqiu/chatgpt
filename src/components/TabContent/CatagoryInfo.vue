@@ -34,7 +34,8 @@ export default {
 
 .info-detail{
     flex-basis: 33.3%;
-    aspect-ratio: 1;
+    height: 33.3vw;
+    /* aspect-ratio: 1; */
     border: 1px solid rgba(148, 142, 141, 0.486);
     display: flex;
     justify-content: center;
@@ -43,4 +44,9 @@ export default {
 
     margin:0px -1px -1px 0px ;
 }
+/* .info-detail::after{
+    content:'';
+    display:block;
+    padding-top:50%;
+} */
 </style>
