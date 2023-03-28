@@ -1,11 +1,14 @@
 <template>
     <div class="chatgpt-container">
+        <div class="chatgpt-title">
+            {{ title }}
+        </div>
         <div class="chatgpt-content">
-            <div v-for="item in answerList" :key="item.answer" class="queation-item">
+            <div v-for="(item,index) in answerList" :key="item.answer" class="queation-item">
                 <div class="question">
-                    {{ item.question }}
+                    <span>{{ item.question }}</span>
                 </div>
-                <div class="answer">
+                <div class="answer" :id="index ? `answer-${index}` : ''" >
                      {{ item.answer }}
                 </div>
             </div>
@@ -18,12 +21,15 @@
 </template>
 
 <script>
+import { info } from '@/data/info'
+
 export default {
     name: 'ChatGpt',
     data(){
         return {
             searchContent: '',
             answerList: [],
+            title: info.chatTitle
         }
     },
     methods:{
@@ -33,6 +39,12 @@ export default {
                     question: this.searchContent,
                     answer: `Not supported ${this.searchContent}`
                 })
+                this.$nextTick(() =>{
+                    document.getElementById(`answer-${this.answerList.length-1}`).scrollIntoView({
+                        
+                    })
+                })
+                this.searchContent = '' ;
             }
         }
     }
@@ -45,16 +57,27 @@ export default {
     flex-direction: column;
     height: 100%;
 }
+
+.chatgpt-title{
+    height: 50px;
+    line-height: 50px;
+    width: 100%;
+    position: sticky;
+    background-color: #282c34;
+    color: #fff;
+}
 .chatgpt-content{
     flex: 1;
     text-align: left;
     padding: 6px 16px;
+    overflow: auto;
 }
 
 .queation-item{
     margin-bottom: 20px;
     display: flex;
     flex-direction: column;
+    font-size: 14px;
 }
 
 .queation-item .question {
@@ -62,9 +85,13 @@ export default {
     border: 1px solid rgba(148, 142, 141, 0.486);
     padding: 6px 16px;
     border-radius: 10px;
+    color: #fff;
+    background-color: #1989fa;
     word-wrap:break-word;
-    text-align: right;
     flex: auto;
+    width: fit-content;
+    margin-right: 0px;
+    margin-left: auto;
 }
 
 .queation-item .answer {
@@ -74,6 +101,7 @@ export default {
     border-radius: 10px;
     word-wrap:break-word;
     flex: auto;
+    width: fit-content;
 }
 .chatgpt-input{
     display: flex;

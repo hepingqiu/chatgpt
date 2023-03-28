@@ -34,7 +34,6 @@ export default {
   font-family: Segoe UI;
   text-align: center;
   color: #2c3e50;
-  padding-top: 16px ;
   display: flex;
   flex-direction: column;
   height: 100vh;

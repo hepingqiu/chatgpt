@@ -1,6 +1,8 @@
 <template>
-    <div class="main">
-        <chat-gpt v-if=" tab == '聊天'"/>
+    <div class="main" id="main">
+        <keep-alive>
+            <chat-gpt v-if=" tab == '聊天'"/>
+        </keep-alive>
     </div>
 </template>
 
@@ -10,7 +12,11 @@ import ChatGpt from './TabContent/ChatGpt.vue';
 export default {
   components: { ChatGpt },
     name: 'MainContent',
-    props: ['tab']
+    props: ['tab'],
+    mounted(){
+        console.log(window.innerHeight-80)
+        document.getElementById('main').style.height = (window.innerHeight-80) + 'px';
+    }
 }
 </script>
 
