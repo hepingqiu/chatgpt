@@ -8,8 +8,8 @@
                 <div class="question">
                     <span>{{ item.question }}</span>
                 </div>
-                <div class="answer" :id="index ? `answer-${index}` : ''" >
-                     {{ item.answer }}
+                <div class="answer" :id="index+1 ? `answer-${index}` : ''" v-chat="item.answer">
+                     
                 </div>
             </div>
         </div>

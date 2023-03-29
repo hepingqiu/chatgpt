@@ -1,7 +1,7 @@
 /*
  * @author: jason_zuo
  * @LastEditors: jason_zuo
- * @LastEditTime: 2023-03-27 16:50:48
+ * @LastEditTime: 2023-03-29 16:28:03
  * @FilePath: \chatgpt\src\main.js
  */
 import Vue from 'vue'
@@ -12,6 +12,20 @@ import App from './App.vue'
 Vue.config.productionTip = false
 
 Vue.use(ElementUI);
+
+Vue.directive('chat',{
+  bind: (el,binding) =>{
+   const value = binding.value;
+   let timerId = null ;
+   let length = 0;
+   timerId = setInterval(() => {
+    el.textContent = value.substring(0, length++);
+    if(length>value.length){
+      clearInterval(timerId);
+    }
+   }, 1000/5);
+  }
+})
 
 new Vue({
   render: h => h(App),
