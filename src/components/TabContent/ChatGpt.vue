@@ -29,7 +29,8 @@ export default {
         return {
             searchContent: '',
             answerList: [],
-            title: info.chatTitle
+            title: info.chatTitle,
+            loading: false,
         }
     },
     methods:{
@@ -40,9 +41,7 @@ export default {
                     answer: `Not supported ${this.searchContent}`
                 })
                 this.$nextTick(() =>{
-                    document.getElementById(`answer-${this.answerList.length-1}`).scrollIntoView({
-                        
-                    })
+                    document.getElementById(`answer-${this.answerList.length-1}`).scrollIntoView({})
                 })
                 this.searchContent = '' ;
             }
