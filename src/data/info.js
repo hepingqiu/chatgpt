@@ -2,7 +2,8 @@ export const info = {
     chatTitle: '智能聊天机器人',
     applyTitle: '应用中心',
     buttonName: '示例',
-    buttonGenerateName: '生成'
+    buttonGenerateName: '生成',
+    chatGptPlaceHolder: '你想和我聊点什么?'
 }
 
 export const applyInofo = [
