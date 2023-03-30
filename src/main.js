@@ -1,7 +1,7 @@
 /*
  * @author: jason_zuo
  * @LastEditors: jason_zuo
- * @LastEditTime: 2023-03-29 16:28:03
+ * @LastEditTime: 2023-03-30 15:28:03
  * @FilePath: \chatgpt\src\main.js
  */
 import Vue from 'vue'
@@ -24,7 +24,18 @@ Vue.directive('chat',{
       clearInterval(timerId);
     }
    }, 1000/5);
-  }
+  },
+  update: (el,binding) =>{
+    const value = binding.value;
+    let timerId = null ;
+    let length = 0;
+    timerId = setInterval(() => {
+     el.textContent = value.substring(0, length++);
+     if(length>value.length){
+       clearInterval(timerId);
+     }
+    }, 1000/5);
+   },
 })
 
 new Vue({

@@ -25,7 +25,7 @@
         :placeholder="placeHolder"
         class="self-input"
       ></el-input>
-      <i class="el-icon-position icon-style" @click="sendQuestion"></i>
+      <i class="el-icon-position icon-style" @click="check"></i>
     </div>
   </div>
 </template>
@@ -33,6 +33,7 @@
 <script>
 import { info } from "@/data/info";
 import { httpPost } from "@/api/request";
+import { httpProxyPost} from "@/api/proxy"
 export default {
   name: "ChatGpt",
   data() {
@@ -51,6 +52,7 @@ export default {
         this.loading = true;
         let content = this.searchContent ;
         let messages = [{ role: "user", content}];
+        // httpProxyPost(content);
         httpPost({ messages })
           .then((rsp) => {
             const { choices } = rsp.data;
@@ -82,6 +84,40 @@ export default {
         this.placeHolder = "思考中...";
       }
     },
+    check(){
+        if (this.searchContent && !this.loading) {
+        this.loading = true;
+        let content = this.searchContent ;
+        httpProxyPost(this.searchContent)
+          .then((rsp) => {
+            console.log(rsp)
+            const {data} = rsp.data
+            this.answerList.push({
+              question: content,
+              answer: data,
+            });
+            this.$nextTick(() => {
+              document
+                .getElementById(`answer-${this.answerList.length - 1}`)
+                .scrollIntoView({});
+            });
+            this.loading = false;
+            this.placeHolder = this.info.chatGptPlaceHolder;
+          })
+          .catch((err) => {
+            console.log(`err`);
+            console.log(err)
+            this.answerList.push({
+              question: content,
+              answer: '喔喔,出错了',
+            });
+            this.loading = false;
+            this.placeHolder = this.info.chatGptPlaceHolder;
+          });
+        this.searchContent = "";
+        this.placeHolder = "思考中...";
+      }
+    }
   },
 };
 </script>
@@ -137,6 +173,7 @@ export default {
   word-wrap: break-word;
   flex: auto;
   width: fit-content;
+  background-color: rgb(247, 247, 248);
 }
 .chatgpt-input {
   display: flex;

@@ -3,6 +3,8 @@
     <div class="detail-title">
       {{ detail.header }}
     </div>
+
+    <div class="detail-icon" v-html="detail.detailIcon"></div>
     <div class="detail-desc">
       {{ detail.detailTitle }}
     </div>
@@ -19,7 +21,7 @@
     </div>
     <div class="input-content">
       <el-input
-        :autosize="{ minRows: 4, maxRows: 6}"
+        :autosize="{ minRows: 4, maxRows: 6 }"
         type="textarea"
         :placeholder="detail.detailPlacehorder"
         v-model="textarea"
@@ -29,14 +31,22 @@
       </el-input>
     </div>
 
-    <div class="generate-btn">
-        {{ btnGenerateName }}
+    <div class="generate-btn" @click="search">
+      {{ btnGenerateName }}<i class="el-icon-loading" v-if="loading"></i>
     </div>
+
+    <div
+      class="apply-answer"
+      id="apply-answer"
+      v-chat="answer"
+      v-show="answer"
+    ></div>
   </div>
 </template>
 
 <script>
 import { info } from "@/data/info";
+import { httpProxyPost } from "@/api/proxy";
 export default {
   name: "CatagoryDetail",
   props: ["detail"],
@@ -44,14 +54,39 @@ export default {
     return {
       btnName: info.buttonName,
       btnGenerateName: info.buttonGenerateName,
-      textarea:''
+      textarea: "",
+      loading: false,
+      answer: "",
     };
   },
   methods: {
-    selectText(text){
-        this.textarea = text;
-    }
-  }
+    selectText(text) {
+      this.textarea = text;
+    },
+    search() {
+      if (!this.loading && this.textarea) {
+        this.loading = true;
+        httpProxyPost(this.textarea).then((rsp) => {
+          const { data } = rsp.data;
+          console.log(data);
+          this.answer = data;
+          this.loading = false;
+        });
+      }
+    },
+  },
+  mounted() {
+    const { height: mainHeight } = document
+      .getElementsByClassName("application")[0]
+      .getBoundingClientRect();
+    const { height: containerHeight } = document
+      .getElementsByClassName("catagory-dedail-container")[0]
+      .getBoundingClientRect();
+    console.log(mainHeight);
+    console.log(containerHeight);
+    document.getElementById("apply-answer").style.maxHeight =
+      mainHeight - containerHeight - 60 + "px";
+  },
 };
 </script>
 
@@ -63,6 +98,9 @@ export default {
   position: sticky;
   background-color: #282c34;
   color: #fff;
+}
+.detail-icon {
+  margin-top: 16px;
 }
 .detail-desc {
   margin-top: 16px;
@@ -89,23 +127,36 @@ export default {
   border-radius: 4px;
 }
 
-.input-content{
-    margin-top: 16px;
-    margin-bottom: 16px;
+.input-content {
+  margin-top: 16px;
+  margin-bottom: 16px;
 }
 
 .el-textarea__inner {
-    resize: none !important;
+  resize: none !important;
 }
 
-.generate-btn{
-    margin-left: 10%;
-    margin-right: 10%;
-    border: 1px solid #1989fa;
-    background-color: #1989fa;
-    color: #fff;
-    border-radius: 20px;
-    height: 30px;
-    line-height: 30px;
+.generate-btn {
+  margin-left: 10%;
+  margin-right: 10%;
+  border: 1px solid #1989fa;
+  background-color: #1989fa;
+  color: #fff;
+  border-radius: 20px;
+  height: 30px;
+  line-height: 30px;
+  margin-bottom: 16px;
+}
+
+.apply-answer {
+  overflow: auto;
+  padding: 6px 16px;
+  text-align: left;
+  background-color: rgb(247, 247, 248);
+  width: fit-content;
+  border: 1px solid rgba(148, 142, 141, 0.486);
+  border-radius: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 </style>
